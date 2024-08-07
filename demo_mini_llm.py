@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from ngram_language_model import NgramLanguageModel
+from mini_llm_model import MiniLlmModel
 
 # Hyperparameters Small Scale
 context_length = 8
@@ -50,9 +50,11 @@ tokenize = lambda s: [ stoi[char] for char in s]
 detokenize = lambda l: "".join([ itos[i] for i in l])
 
 # Create model
-model = NgramLanguageModel(vocab_size, emb_size, context_length, n_heads, n_layers)
+model = MiniLlmModel(vocab_size, emb_size, context_length, n_heads, n_layers)
 model.load_state_dict(torch.load('char_llm.pth'))
 model = model.to(device)
+total_params = sum(p.numel() for p in model.parameters())
+print(f"This model has {total_params} parameters")
 model.eval()
 
 # Try generating sample text

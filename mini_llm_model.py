@@ -141,7 +141,7 @@ class AttentionPlusMLPBlock(nn.Module):
         return x
 
 
-class NgramLanguageModel(nn.Module):
+class MiniLlmModel(nn.Module):
 
     def __init__(self, vocab_size, emb_size, context_length, n_heads, n_layers, dropout=0.2):
         super().__init__()
@@ -247,7 +247,7 @@ class NgramLanguageModel(nn.Module):
 
 if __name__ == "__main__":
     # Create model
-    model = NgramLanguageModel(vocab_size=26, emb_size=32, context_length=8, n_heads=2, n_layers=2, dropout=0.2)
+    model = MiniLlmModel(vocab_size=26, emb_size=32, context_length=8, n_heads=2, n_layers=2, dropout=0.2)
     model = model.to(device)
     total_params = sum(p.numel() for p in model.parameters())
     print(f"This model has {total_params} parameters")

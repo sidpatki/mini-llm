@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from ngram_language_model import NgramLanguageModel
+from mini_llm_model import MiniLlmModel
 
 # Declare seed for reproducibility
 torch.manual_seed(1337)
@@ -85,7 +85,7 @@ def get_batch(split, batch_size=4):
     return x, y 
 
 # Create model
-model = NgramLanguageModel(vocab_size, emb_size, context_length, n_heads, n_layers)
+model = MiniLlmModel(vocab_size, emb_size, context_length, n_heads, n_layers)
 model = model.to(device)
 total_params = sum(p.numel() for p in model.parameters())
 print(f"This model has {total_params} parameters")
