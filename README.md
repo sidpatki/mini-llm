@@ -5,13 +5,13 @@
 
 # Train
 ```bash
-python train_mini_llm.py
+python train_mini_llm.py --corpus harry-potter.txt --config <CONFIG>
 ```
 
 # Demo
 ```bash
 # This should generate new shakspere
-python demo_mini_llm.py
+python demo_mini_llm.py --corpus harry-potter.txt --config <CONFIG> --model <MODEL>
 ```
 
 

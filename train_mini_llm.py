@@ -153,8 +153,8 @@ if __name__ == "__main__":
     model.eval()
 
     # Save the trained model
-    torch.save(model.state_dict(), 'char_llm.pth')
-    print("Model saved to char_llm.pth")
+    torch.save(model.state_dict(), f'{config.get("name")}.pth')
+    print(f"Model saved to {config.get("name")}.pth")
 
     # Try generating sample text
     idx = torch.zeros((1,1), dtype=torch.long, device=device)
