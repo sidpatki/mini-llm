@@ -2,34 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from mini_llm_model import MiniLlmModel
-import argparse
-import json
-
-def load_config(path):
-    """
-    Method to load config file
-    """
-    with open(path, 'r') as file:
-        config = json.load(file)
-    return config
-
-def parse_args():
-    """
-    Method to parse input arguments
-    """
-
-    # Create an ArgumentParser object
-    parser = argparse.ArgumentParser(description='Demo to run the mini-llm model')
-
-    # Define expected arguments
-    parser.add_argument('--corpus', type=str, required=True, help='The input .txt file for generating vocab')
-    parser.add_argument('--model', type=str, required=True, help='The model .pth file to run')
-    parser.add_argument('--config', type=str, required=True, help='The config .json file')
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    return args
+from utils import parse_args, load_config, Tokenizer
 
 if __name__ == "__main__":
 
@@ -53,13 +26,9 @@ if __name__ == "__main__":
     print(vocab)
     print(vocab_size)
 
-    # Create char to int and reverse mapping
     # Make tokenizer
-    stoi = { char : i for i, char in enumerate(vocab)}
-    itos = { i : char for i, char in enumerate(vocab)}
-
-    tokenize = lambda s: [ stoi[char] for char in s]
-    detokenize = lambda l: "".join([ itos[i] for i in l])
+    tokenizer = Tokenizer(vocab)
+    print(tokenizer.detokenize(tokenizer.tokenize("happy to demo character level mini-llm")))
 
     # Create model
     model = MiniLlmModel(vocab_size, config.get("emb_size"), config.get("context_length"), config.get("n_heads"), config.get("n_layers"))
@@ -71,11 +40,11 @@ if __name__ == "__main__":
 
     # Try generating sample text
     idx = torch.zeros((1,1), dtype=torch.long, device=device)
-    print(detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))
+    print(tokenizer.detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))
 
     # Try generating text with custom prompt
-    prompt = "Hello world, this is a large language model. My name is?"
-    idx = torch.tensor(tokenize(prompt), dtype=torch.long, device=device)
+    prompt = "Harry's surname is "
+    idx = torch.tensor(tokenizer.tokenize(prompt), dtype=torch.long, device=device)
     idx = idx.reshape(1, len(prompt))
     print("\n\n\n")
-    print(detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))
+    print(tokenizer.detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))

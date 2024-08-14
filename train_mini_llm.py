@@ -2,33 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from mini_llm_model import MiniLlmModel
-import argparse
-import json
-
-def load_config(path):
-    """
-    Method to load config file
-    """
-    with open(path, 'r') as file:
-        config = json.load(file)
-    return config
-
-def parse_args():
-    """
-    Method to parse input arguments
-    """
-
-    # Create an ArgumentParser object
-    parser = argparse.ArgumentParser(description='Demo to run the mini-llm model')
-
-    # Define expected arguments
-    parser.add_argument('--corpus', type=str, required=True, help='The input .txt file for generating vocab')
-    parser.add_argument('--config', type=str, required=True, help='The config .json file')
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    return args
+from utils import parse_args, load_config, Tokenizer
 
 if __name__ == "__main__":
 
@@ -68,18 +42,12 @@ if __name__ == "__main__":
     print(vocab)
     print(vocab_size)
 
-    # Create char to int and reverse mapping
     # Make tokenizer
-    stoi = { char : i for i, char in enumerate(vocab)}
-    itos = { i : char for i, char in enumerate(vocab)}
-
-    tokenize = lambda s: [ stoi[char] for char in s]
-    detokenize = lambda l: "".join([ itos[i] for i in l])
-
-    print(detokenize(tokenize("happy to build char-llm")))
+    tokenizer = Tokenize(vocab)
+    print(tokenizer.detokenize(tokenizer.tokenize("happy to build character level mini-llm")))
 
     # Tokenize the entire data and store it in a tensor
-    data = torch.tensor(tokenize(text))
+    data = torch.tensor(tokenizer.tokenize(text))
 
     # Split data into train and val
     n = int(len(data) * 0.9)
@@ -158,4 +126,4 @@ if __name__ == "__main__":
 
     # Try generating sample text
     idx = torch.zeros((1,1), dtype=torch.long, device=device)
-    print(detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))
+    print(tokenizer.detokenize(model.generate(idx, max_new_tokens=400)[0].tolist()))
