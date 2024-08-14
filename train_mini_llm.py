@@ -104,12 +104,19 @@ if __name__ == "__main__":
 
     # Training loop
     model.train()
+    min_val_loss = float('inf')
     for i in range(max_iters):
 
         # Every once in a while calculate loss on train and val sets
         if i % eval_interval == 0 or i == (max_iters-1):
             losses = estimate_loss(eval_iterations=eval_iterations)
             print(f"iteration {i}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+
+            # Save the trained model conditionally
+            if losses['val'] < min_val_loss:
+                torch.save(model.state_dict(), f"./checkpoints/{config.get('name')}.pth")
+                # print(f"Model saved to ./checkpoints/{config.get('name')}.pth")
+                min_val_loss = losses['val']
 
         xb, yb = get_batch('train', batch_size=batch_size)
 
@@ -119,10 +126,6 @@ if __name__ == "__main__":
         optimizer.step()
 
     model.eval()
-
-    # Save the trained model
-    torch.save(model.state_dict(), f"{config.get('name')}.pth")
-    print(f"Model saved to {config.get('name')}.pth")
 
     # Try generating sample text
     idx = torch.zeros((1,1), dtype=torch.long, device=device)

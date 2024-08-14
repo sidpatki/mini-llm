@@ -1,5 +1,5 @@
 {
-    "name" : "mini-llm-30M",
+    "name" : "mini-llm-3M",
     "batch_size" : 64,
     "context_length" : 256,
     "n_heads" : 4,

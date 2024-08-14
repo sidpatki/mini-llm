@@ -6,7 +6,7 @@
     "n_layers" : 4,
     "eval_interval" : 1000,
     "eval_iterations" : 1000,
-    "max_iters" : 10000,
+    "max_iters" : 50000,
     "emb_size" : 32,
     "learning_rate" : 1e-3,
     "dropout" : 0.2
