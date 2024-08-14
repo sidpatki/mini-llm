@@ -43,7 +43,7 @@ if __name__ == "__main__":
     print(vocab_size)
 
     # Make tokenizer
-    tokenizer = Tokenize(vocab)
+    tokenizer = Tokenizer(vocab)
     print(tokenizer.detokenize(tokenizer.tokenize("happy to build character level mini-llm")))
 
     # Tokenize the entire data and store it in a tensor
@@ -121,8 +121,8 @@ if __name__ == "__main__":
     model.eval()
 
     # Save the trained model
-    torch.save(model.state_dict(), f'{config.get("name")}.pth')
-    print(f"Model saved to {config.get("name")}.pth")
+    torch.save(model.state_dict(), f"{config.get('name')}.pth")
+    print(f"Model saved to {config.get('name')}.pth")
 
     # Try generating sample text
     idx = torch.zeros((1,1), dtype=torch.long, device=device)
