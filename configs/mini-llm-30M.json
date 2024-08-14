@@ -1,0 +1,12 @@
+{
+    "batch_size" : 64,
+    "context_length" : 256,
+    "n_heads" : 4,
+    "n_layers" : 4,
+    "eval_interval" : 1000,
+    "eval_iterations" : 1000,
+    "max_iters" : 10000,
+    "emb_size" : 256,
+    "learning_rate" : 3e-4,
+    "dropout" : 0.2
+}
