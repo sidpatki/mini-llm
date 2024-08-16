@@ -75,7 +75,7 @@ class MultiHeadSelfAttention(nn.Module):
         
         # Define a projection layer that changes the size of the output of this
         # to match the input size. This is useful because we use skip connections
-        # e.g. y = x + F(x). We use projection layer to make sure that dim of F(x) == x
+        # e.g. y = x + F(x). We use projection layer to make sure that dim (F(x)) == dim (x)
         self.proj_layer = nn.Linear(op_emb_size, ip_emb_size)
 
         # Add dropout layer
@@ -238,6 +238,9 @@ class MiniLlmModel(nn.Module):
 
             # Sample from a multinomial distribution
             pred_token_idx = torch.multinomial(probs, num_samples = 1)
+            
+            # Arg max instead of sampling
+            # pred_token_idx = torch.unsqueeze(torch.argmax(probs, dim=-1), -1)
 
             # Append the predicted
             idxs = torch.cat((idxs, pred_token_idx), dim=1)
